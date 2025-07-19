@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<h2>Welcome, {{ user.full_name }}!</h2>
+<img src="{{ user.photo.url }}" width="150" height="150" class="img-thumbnail mb-3">
+<ul class="list-group">
+    <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+    {% if salary %}
+    <li class="list-group-item"><strong>Gross Salary:</strong> ₦{{ salary.amount }}</li>
+{% else %}
+     <li class="list-group-item"><em>No salary assigned yet.</em></li>
+{% endif %}
+    <li class="list-group-item"><strong>Address:</strong> {{ user.address }}</li>
+    <li class="list-group-item"><strong>Next of Kin:</strong> {{ user.next_of_kin }}</li>
+    <li class="list-group-item"><strong>Next of Kin phone number:</strong> {{ user.next_of_kin_contact }}</li>
+
+{% if salary %}
+    <li class="list-group-item"><strong>Current Loan:</strong> ₦{{ salary.loan }}</li>
+    <li class="list-group-item"><strong>Balance/{{ salary.payment_for }}:</strong> ₦{{ salary.balance }}</li>
+{% else %}
+    <p>No salary info available.</p>
+</ul>
+{% endif %}
+{% endblock %}

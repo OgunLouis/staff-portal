@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: blog_post  # Change this to your actual Render service name
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn blog_project.wsgi
+    deployCommand: python manage.py migrate
