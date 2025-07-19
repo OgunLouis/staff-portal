@@ -1,10 +1,4 @@
-services:
-  - type: web
-    name: staff_portal  # Rename this to match your Render service name
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn staff_portal.wsgi
-    deployCommand: |
-      python manage.py migrate --fake accounts zero
-      python manage.py migrate --fake admin zero
-      python manage.py migrate
+deployCommand: |
+  python manage.py migrate --fake accounts zero
+  python manage.py migrate --fake admin zero
+  python manage.py migrate
