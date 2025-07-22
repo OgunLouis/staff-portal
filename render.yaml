@@ -1,5 +1,0 @@
-deployCommand: |
-  python manage.py migrate --fake accounts zero
-  python manage.py migrate --fake admin zero
-  python manage.py makemigrations
-  python manage.py migrate

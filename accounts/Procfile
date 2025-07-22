@@ -1,1 +1,0 @@
-web: gunicorn staff_portal.wsgi:application
