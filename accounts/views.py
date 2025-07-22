@@ -27,7 +27,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('profile')
+            return redirect('home')
         else:
             error = 'Invalid login details'
             return render(request, 'accounts/login.html', {'error': error})

@@ -37,7 +37,16 @@ class CustomUser(AbstractUser):
     photo = models.ImageField(upload_to='article_images/', blank=True, null=True)
     next_of_kin = models.CharField(max_length=100, blank=True, null=True)
     next_of_kin_contact = models.CharField(max_length=11, blank=True, null=True)
-
+    ROLE_CHOICES = [
+        ('Operator', 'Operator'),
+        ('Finisher', 'Finisher'),
+        ('Admin', 'Admin'),
+        ('Management', 'Management'),
+        ('Accountant', 'Accountant'),
+        ('Graphics', 'Graphics'),
+        ('Security', 'Security'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, blank=True, null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
