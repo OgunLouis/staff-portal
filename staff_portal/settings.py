@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'staff_portal.wsgi.application'
 #    }
 #}
 DATABASES = {
-  'default': dj_database_url.config(default=config('DATABASE_URL'))
+  'default': dj_database_url.config(default=config('postgresql://postgres:PxcrovIKGGdiFiKRImlueFwSSIjzHPeH@postgres.railway.internal:5432/railway'))
 }
 
 # Password validation
