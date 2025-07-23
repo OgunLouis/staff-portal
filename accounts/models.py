@@ -32,11 +32,13 @@ class CustomUser(AbstractUser):
     username = None  # 👈 Important to disable the default username field
 
     full_name = models.CharField(max_length=100, blank=True, null=True)
+    phone_number=models.CharField(max_length=11, blank=True,null=True,default="", verbose_name="Staff Phone Contact")
     email = models.EmailField(_('email address'), unique=True)
-    address = models.CharField(max_length=150, blank=True, null=True)
-    photo = models.ImageField(upload_to='article_images/', blank=True, null=True)
+    address = models.CharField(max_length=150, blank=True, null=True,verbose_name="Home Address")
+    photo = models.ImageField(upload_to='article_images/', blank=True, null=True,verbose_name="Staff Image")
     next_of_kin = models.CharField(max_length=100, blank=True, null=True)
-    next_of_kin_contact = models.CharField(max_length=11, blank=True, null=True)
+    next_of_kin_contact = models.CharField(max_length=11, blank=True, null=True,verbose_name="Next of Kin Contact Number")
+    next_of_kin_address = models.CharField(max_length=100, blank=True, null=True)
     ROLE_CHOICES = [
         ('Operator', 'Operator'),
         ('Finisher', 'Finisher'),

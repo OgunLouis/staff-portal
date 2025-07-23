@@ -8,19 +8,21 @@ class StaffSignupForm(UserCreationForm):
         fields = [
             'full_name',
             'email',
+            'phone_number',
             'password1',
             'password2',
             'address',
+            'photo',
             'next_of_kin',
             'next_of_kin_contact',
-            'photo',
+            'next_of_kin_address'
         ]
 
 
 class StaffUpdateForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['email', 'address', 'next_of_kin', 'photo','next_of_kin_contact', 'full_name']
+        fields = ['email', 'address', 'next_of_kin', 'photo','next_of_kin_contact', 'full_name','phone_number','next_of_kin_address']
 
 class ImageUploadForm(forms.Form):
     image = forms.ImageField()

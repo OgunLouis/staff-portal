@@ -2,54 +2,70 @@
 {% block title %}My Profile{% endblock %}
 
 {% block content %}
-<h2>Welcome, {{ user.full_name }}!</h2>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-{% if user.photo %}
-  <img src="{{ user.photo.url }}" width="150" height="150" class="img-thumbnail mb-3">
-{% else %}
-  <p>No photo uploaded yet.</p>
-{% endif %}
+<div class="card mx-auto mt-4" style="max-width: 600px;">
+  <div class="card-body">
+    <h3 class="card-title text-center mb-4">
+     Welcome, {{ user.full_name }}!
+    </h3>
 
-<ul class="list-group">
-    <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+    <div class="text-center mb-3">
+      {% if user.photo %}
+        <img src="{{ user.photo.url }}" width="150" height="150" class="img-thumbnail">
+      {% else %}
+        <p>No photo uploaded yet.</p>
+      {% endif %}
+    </div>
 
-    {% if salary %}
+    <ul class="list-group list-group-flush mb-3">
+      <li class="list-group-item"><strong><i class="bi bi-envelope-fill"></i> Email:</strong> {{ user.email }}</li>
+
+      {% if salary %}
         <li class="list-group-item">
-            <strong>Gross Salary:</strong> 
-            <span id="salary-text">*******</span>
-            <button class="btn btn-sm btn-outline-primary" onclick="toggle('salary-text', '{{ salary.amount }}', this)">Show</button>
+          <strong><i class="bi bi-cash-stack"></i> Gross Salary:</strong>
+          <span id="salary-text">*******</span>
+          <button class="btn btn-sm btn-outline-primary float-end" onclick="toggle('salary-text', '{{ salary.amount }}', this)">Show</button>
         </li>
         <li class="list-group-item">
-            <strong>Current Loan:</strong> 
-            <span id="loan-text">*******</span>
-            <button class="btn btn-sm btn-outline-primary" onclick="toggle('loan-text', '{{ salary.loan }}', this)">Show</button>
+          <strong><i class="bi bi-bank"></i> Current Loan:</strong>
+          <span id="loan-text">*******</span>
+          <button class="btn btn-sm btn-outline-primary float-end" onclick="toggle('loan-text', '{{ salary.loan }}', this)">Show</button>
         </li>
         <li class="list-group-item">
-            <strong>Balance/{{ salary.payment_for }}:</strong> 
-            <span id="balance-text">*******</span>
-            <button class="btn btn-sm btn-outline-primary" onclick="toggle('balance-text', '{{ salary.balance }}', this)">Show</button>
+          <strong><i class="bi bi-wallet2"></i> Balance/{{ salary.payment_for }}:</strong>
+          <span id="balance-text">*******</span>
+          <button class="btn btn-sm btn-outline-primary float-end" onclick="toggle('balance-text', '{{ salary.balance }}', this)">Show</button>
         </li>
-    {% else %}
-        <li class="list-group-item"><em>No salary assigned yet.</em></li>
-    {% endif %}
+      {% else %}
+        <li class="list-group-item text-muted"><em>No salary assigned yet.</em></li>
+      {% endif %}
 
-    <li class="list-group-item"><strong>Staff Role:</strong> {{ user.role }}</li>
-    <li class="list-group-item"><strong>Address:</strong> {{ user.address }}</li>
-    <li class="list-group-item"><strong>Next of Kin:</strong> {{ user.next_of_kin }}</li>
-    <li class="list-group-item"><strong>Next of Kin phone number:</strong> {{ user.next_of_kin_contact }}</li>
-</ul>
+      <li class="list-group-item"><strong><i class="bi bi-briefcase-fill"></i> Staff Role:</strong> {{ user.role }}</li>
+      <li class="list-group-item"><strong><i class="bi bi-geo-alt-fill"></i> Address:</strong> {{ user.address }}</li>
+      <li class="list-group-item"><strong><i class="bi bi-people-fill"></i> Next of Kin:</strong> {{ user.next_of_kin }}</li>
+      <li class="list-group-item"><strong><i class="bi bi-telephone-fill"></i> Next of Kin Phone Number:</strong> {{ user.next_of_kin_contact }}</li>
+    </ul>
 
-<!-- Script to toggle each item -->
+    <div class="text-center mt-3">
+      <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary">
+        <i class="bi bi-pencil-square"></i> Edit Profile
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Toggle script -->
 <script>
-    function toggle(spanId, realValue, btn) {
-        const span = document.getElementById(spanId);
-        if (span.innerText.trim() === '*******') {
-            span.innerText = '₦' + realValue;
-            btn.innerText = 'Hide';
-        } else {
-            span.innerText = '*******';
-            btn.innerText = 'Show';
-        }
+  function toggle(spanId, realValue, btn) {
+    const span = document.getElementById(spanId);
+    if (span.innerText.trim() === '*******') {
+      span.innerText = '₦' + realValue;
+      btn.innerText = 'Hide';
+    } else {
+      span.innerText = '*******';
+      btn.innerText = 'Show';
     }
+  }
 </script>
 {% endblock %}
