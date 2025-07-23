@@ -31,9 +31,9 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     username = None  # 👈 Important to disable the default username field
 
-    full_name = models.TextField(blank=False, null=False)
+    full_name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(_('email address'), unique=True)
-    address = models.TextField(blank=True, null=True)
+    address = models.CharField(max_length=150, blank=True, null=True)
     photo = models.ImageField(upload_to='article_images/', blank=True, null=True)
     next_of_kin = models.CharField(max_length=100, blank=True, null=True)
     next_of_kin_contact = models.CharField(max_length=11, blank=True, null=True)
