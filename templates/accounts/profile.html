@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% block title %}My Profile{% endblock %}
 
 {% block content %}
@@ -25,17 +26,17 @@
         <li class="list-group-item">
           <strong><i class="bi bi-cash-stack"></i> Gross Salary:</strong>
           <span id="salary-text">*******</span>
-          <button class="btn btn-sm btn-outline-primary float-end" onclick="toggle('salary-text', '{{ salary.amount }}', this)">Show</button>
+          <button class="btn btn-sm btn-outline-primary float-end" onclick="toggle('salary-text', '{{ salary.amount|intcomma }}', this)">Show</button>
         </li>
         <li class="list-group-item">
           <strong><i class="bi bi-bank"></i> Current Loan:</strong>
           <span id="loan-text">*******</span>
-          <button class="btn btn-sm btn-outline-primary float-end" onclick="toggle('loan-text', '{{ salary.loan }}', this)">Show</button>
+          <button class="btn btn-sm btn-outline-primary float-end" onclick="toggle('loan-text', '{{ salary.loan|intcomma }}', this)">Show</button>
         </li>
         <li class="list-group-item">
           <strong><i class="bi bi-wallet2"></i> Balance/{{ salary.payment_for }}:</strong>
           <span id="balance-text">*******</span>
-          <button class="btn btn-sm btn-outline-primary float-end" onclick="toggle('balance-text', '{{ salary.balance }}', this)">Show</button>
+          <button class="btn btn-sm btn-outline-primary float-end" onclick="toggle('balance-text', '{{ salary.balance|intcomma }}', this)">Show</button>
         </li>
       {% else %}
         <li class="list-group-item text-muted"><em>No salary assigned yet.</em></li>
