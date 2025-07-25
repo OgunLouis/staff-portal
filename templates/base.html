@@ -19,11 +19,47 @@
       color: #212529;
     }
 
+    /* Swirly background animation */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle at center, rgba(0,188,212,0.4), transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+      animation: swirl 20s infinite linear alternate;
+      filter: blur(50px);
+      pointer-events: none;
+    }
+
+    body::before {
+      top: -10%;
+      left: -10%;
+    }
+
+    body::after {
+      top: 60%;
+      left: 70%;
+      animation-delay: 5s;
+    }
+
+    @keyframes swirl {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      100% {
+        transform: translate(50px, 100px) rotate(360deg);
+      }
+    }
+
     .navbar {
       background-color: #1f1f1f;
       padding-top: 0.6rem;
       padding-bottom: 0.6rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      position: relative;
+      z-index: 2;
     }
 
     .navbar-brand,
@@ -61,6 +97,8 @@
 
     .container-xl {
       margin-top: 2rem;
+      position: relative;
+      z-index: 2;
     }
 
     footer {
@@ -69,6 +107,8 @@
       text-align: center;
       padding: 1rem 0;
       font-size: 0.875rem;
+      position: relative;
+      z-index: 2;
     }
 
     .card {
@@ -82,7 +122,7 @@
     }
   </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 position-relative" style="z-index:1;">
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark px-4">
@@ -100,12 +140,13 @@
         {% if user.is_authenticated %}
           <li class="nav-item text-center">
             <a class="nav-link px-3" href="#">
-              <div class="coming-soon">Coming Soon</div>
-              <span>Apply for Loans</span>
+              <div class="coming-soon">New Feature</div>
+              <a href="{% url 'apply_loan' %}" class="btn btn-outline-primary w-100 mb-2">Apply for Loan</a>
             </a>
           </li>
           <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'edit_profile' %}">Edit</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Loan status</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'loan_status' %}">Edit</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
         {% else %}
           <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
@@ -116,7 +157,7 @@
   </nav>
 
   <!-- Page content -->
-  <main class="container-xl flex-grow-1"></main>
+  <main class="container-xl flex-grow-1 position-relative" style="z-index: 2;">
     {% block content %}{% endblock %}
   </main>
 

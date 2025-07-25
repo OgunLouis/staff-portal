@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}My Loan Status{% endblock %}
+{% block content %}
+{% load humanize %}
+
+<div class="container mt-4">
+  <h3 class="mb-4 text-center">My Loan Applications</h3>
+
+  {% if loans %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Amount (₦)</th>
+            <th>Months</th>
+            <th>Monthly Repayment (₦)</th>
+            <th>Total Repayment (₦)</th>
+            <th>Status</th>
+            <th>Reason</th>
+            <th>Denial Reason</th>
+            <th>Requested On</th>
+            <th>Repayment Ends</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for loan in loans %}
+          <tr>
+            <td>{{ loan.amount|floatformat:2|intcomma }}</td>
+            <td>{{ loan.months_to_repay }}</td>
+            <td>{{ loan.monthly_repayment|floatformat:2|intcomma }}</td>
+            <td>{{ loan.total_repayment|floatformat:2|intcomma }}</td>
+            <td>
+              {% if loan.status == 'approved' %}
+                <span class="badge bg-success">Approved</span>
+              {% elif loan.status == 'pending' %}
+                <span class="badge bg-warning text-dark">Pending</span>
+              {% else %}
+                <span class="badge bg-danger">Denied</span>
+              {% endif %}
+            </td>
+            <td>{{ loan.reason }}</td>
+            <td>{{ loan.denial_reason|default:"—" }}</td>
+            <td>{{ loan.created_at|date:"M d, Y" }}</td>
+            <td>
+              {% if loan.repayment_end_date %}
+                {{ loan.repayment_end_date|date:"M d, Y" }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center">
+      You haven't applied for any loans yet.
+      <a href="{% url 'apply_loan' %}" class="btn btn-outline-primary mt-2">Apply for Loan</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

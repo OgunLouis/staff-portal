@@ -5,7 +5,9 @@ from .forms import StaffSignupForm, StaffUpdateForm
 from .models import Salary
 from .utils import upload_to_imagekit
 from django.conf import settings
-
+from .forms import LoanApplicationForm
+from .models import Loan
+from django.core.paginator import Paginator
 def home(request):
     return render(request, 'accounts/home.html')
 
@@ -67,3 +69,24 @@ def edit_profile_view(request):
         form = StaffUpdateForm(instance=request.user)
 
     return render(request, 'accounts/edit_profile.html', {'form': form})
+
+@login_required
+def apply_for_loan(request):
+    if request.method == 'POST':
+        form = LoanApplicationForm(request.POST)
+        if form.is_valid():
+            loan = form.save(commit=False)
+            loan.user = request.user
+            loan.save()
+            return redirect('loan_status')  # Create this view later
+    else:
+        form = LoanApplicationForm()
+    return render(request, 'accounts/apply.html', {'form': form})
+
+@login_required
+def loan_status(request):
+    user_loans = Loan.objects.filter(user=request.user).order_by('-created_at')
+    paginator = Paginator(user_loans, 5)  # Show 5 loans per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'accounts/status.html', {'loans': page_obj})

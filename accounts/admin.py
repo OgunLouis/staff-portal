@@ -29,3 +29,25 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'full_name', 'password1', 'password2'),
         }),
     )
+
+from django.contrib import admin
+from .models import Loan
+
+@admin.register(Loan)
+class LoanAdmin(admin.ModelAdmin):
+    list_display = ('user', 'amount', 'status', 'monthly_repayment', 'total_repayment', 'months_to_repay', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('user__email', 'reason')
+    readonly_fields = ('monthly_repayment', 'total_repayment','created_at',)
+
+    fieldsets = (
+        ('Loan Details', {
+            'fields': ('user', 'amount', 'months_to_repay', 'reason')
+        }),
+        ('Repayment Info', {
+            'fields': ('monthly_repayment', 'total_repayment')
+        }),
+        ('Approval', {
+            'fields': ('status', 'denial_reason')
+        }),
+    )

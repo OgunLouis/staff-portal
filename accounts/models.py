@@ -6,8 +6,8 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
 import calendar
-
-
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta 
 
 
 
@@ -78,3 +78,42 @@ class Salary(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - ₦{self.amount} ({self.payment_for})"
+    
+
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta  # Make sure python-dateutil is installed
+
+class Loan(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('denied', 'Denied'),
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    amount = models.PositiveIntegerField()
+    months_to_repay = models.PositiveSmallIntegerField()
+    interest_rate = models.FloatField(default=0.05)
+    total_repayment = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    monthly_repayment = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    reason = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    denial_reason = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    repayment_end_date = models.DateField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        total_with_interest = self.amount + (self.amount * self.interest_rate)
+        self.total_repayment = round(total_with_interest, 2)
+        self.monthly_repayment = round(self.total_repayment / self.months_to_repay, 2)
+
+        if self.created_at:
+            # Use `created_at` to calculate repayment_end_date
+            self.repayment_end_date = (self.created_at + relativedelta(months=self.months_to_repay)).date()
+        else:
+            self.repayment_end_date = (now() + relativedelta(months=self.months_to_repay)).date()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Loan: {self.user.email} - ₦{self.amount} ({self.status})"
