@@ -1,57 +1,45 @@
 {% extends 'base.html' %}
 {% block title %}My Loan Status{% endblock %}
-{% block content %}
 {% load humanize %}
+{% block content %}
 
 <div class="container mt-4">
   <h3 class="mb-4 text-center">My Loan Applications</h3>
 
   {% if loans %}
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-          <tr>
-            <th>Amount (₦)</th>
-            <th>Months</th>
-            <th>Monthly Repayment (₦)</th>
-            <th>Total Repayment (₦)</th>
-            <th>Status</th>
-            <th>Reason</th>
-            <th>Denial Reason</th>
-            <th>Requested On</th>
-            <th>Repayment Ends</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for loan in loans %}
-          <tr>
-            <td>{{ loan.amount|floatformat:2|intcomma }}</td>
-            <td>{{ loan.months_to_repay }}</td>
-            <td>{{ loan.monthly_repayment|floatformat:2|intcomma }}</td>
-            <td>{{ loan.total_repayment|floatformat:2|intcomma }}</td>
-            <td>
-              {% if loan.status == 'approved' %}
-                <span class="badge bg-success">Approved</span>
-              {% elif loan.status == 'pending' %}
-                <span class="badge bg-warning text-dark">Pending</span>
-              {% else %}
-                <span class="badge bg-danger">Denied</span>
-              {% endif %}
-            </td>
-            <td>{{ loan.reason }}</td>
-            <td>{{ loan.denial_reason|default:"—" }}</td>
-            <td>{{ loan.created_at|date:"M d, Y" }}</td>
-            <td>
-              {% if loan.repayment_end_date %}
-                {{ loan.repayment_end_date|date:"M d, Y" }}
-              {% else %}
-                —
-              {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div class="row g-4">
+      {% for loan in loans %}
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title mb-3">
+                Loan of ₦{{ loan.amount|floatformat:2|intcomma }}
+                {% if loan.status == 'approved' %}
+                  <span class="badge bg-success float-end">Approved</span>
+                {% elif loan.status == 'pending' %}
+                  <span class="badge bg-warning text-dark float-end">Pending</span>
+                {% else %}
+                  <span class="badge bg-danger float-end">Denied</span>
+                {% endif %}
+              </h5>
+
+              <p><strong>Months to Repay:</strong> {{ loan.months_to_repay }}</p>
+              <p><strong>Monthly Repayment:</strong> ₦{{ loan.monthly_repayment|floatformat:2|intcomma }}</p>
+              <p><strong>Total Repayment:</strong> ₦{{ loan.total_repayment|floatformat:2|intcomma }}</p>
+              <p><strong>Reason:</strong> {{ loan.reason }}</p>
+              <p><strong>Denial Reason:</strong> {{ loan.denial_reason|default:"—" }}</p>
+              <p><strong>Requested On:</strong> {{ loan.created_at|date:"M d, Y" }}</p>
+              <p><strong>Repayment Ends:</strong>
+                {% if loan.repayment_end_date %}
+                  {{ loan.repayment_end_date|date:"M d, Y" }}
+                {% else %}
+                  —
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
     </div>
   {% else %}
     <div class="alert alert-info text-center">
@@ -60,4 +48,5 @@
     </div>
   {% endif %}
 </div>
+
 {% endblock %}
