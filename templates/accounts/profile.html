@@ -28,6 +28,7 @@
           <span id="salary-text">*******</span>
           <button class="btn btn-sm btn-outline-primary float-end" onclick="toggle('salary-text', '{{ salary.amount|intcomma }}', this)">Show</button>
         </li>
+        
         <li class="list-group-item">
           <strong><i class="bi bi-bank"></i> Current Loan:</strong>
           <span id="loan-text">*******</span>
@@ -51,6 +52,8 @@
     <div class="text-center mt-3">
       <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary">
         <i class="bi bi-pencil-square"></i> Edit Profile
+      <a href="{% url 'download_payslip' %}" class="btn btn-outline-primary">
+                Download Payslip </a>
       </a>
     </div>
   </div>

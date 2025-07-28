@@ -13,7 +13,10 @@
           <div class="card shadow-sm h-100">
             <div class="card-body">
               <h5 class="card-title mb-3">
-                Loan of ₦{{ loan.amount|floatformat:2|intcomma }}
+                Loan of 
+                <span id="amount-{{ loan.id }}">*****</span>
+                <button class="btn btn-sm btn-outline-secondary" onclick="toggleAmount('amount-{{ loan.id }}', {{ loan.amount }})">Show</button>
+
                 {% if loan.status == 'approved' %}
                   <span class="badge bg-success float-end">Approved</span>
                 {% elif loan.status == 'pending' %}
@@ -24,8 +27,19 @@
               </h5>
 
               <p><strong>Months to Repay:</strong> {{ loan.months_to_repay }}</p>
-              <p><strong>Monthly Repayment:</strong> ₦{{ loan.monthly_repayment|floatformat:2|intcomma }}</p>
-              <p><strong>Total Repayment:</strong> ₦{{ loan.total_repayment|floatformat:2|intcomma }}</p>
+
+              <p>
+                <strong>Monthly Repayment:</strong> 
+                <span id="monthly-{{ loan.id }}">*****</span>
+                <button class="btn btn-sm btn-outline-secondary" onclick="toggleAmount('monthly-{{ loan.id }}', {{ loan.monthly_repayment }})">Show</button>
+              </p>
+
+              <p>
+                <strong>Total Repayment:</strong> 
+                <span id="total-{{ loan.id }}">*****</span>
+                <button class="btn btn-sm btn-outline-secondary" onclick="toggleAmount('total-{{ loan.id }}', {{ loan.total_repayment }})">Show</button>
+              </p>
+
               <p><strong>Reason:</strong> {{ loan.reason }}</p>
               <p><strong>Denial Reason:</strong> {{ loan.denial_reason|default:"—" }}</p>
               <p><strong>Requested On:</strong> {{ loan.created_at|date:"M d, Y" }}</p>
@@ -48,5 +62,17 @@
     </div>
   {% endif %}
 </div>
+
+<!-- JavaScript to toggle amounts -->
+<script>
+  function toggleAmount(id, amount) {
+    const el = document.getElementById(id);
+    if (el.innerText === '*****') {
+      el.innerText = '₦' + parseFloat(amount).toLocaleString(undefined, {minimumFractionDigits: 2});
+    } else {
+      el.innerText = '*****';
+    }
+  }
+</script>
 
 {% endblock %}

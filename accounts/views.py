@@ -8,6 +8,12 @@ from django.conf import settings
 from .forms import LoanApplicationForm
 from .models import Loan
 from django.core.paginator import Paginator
+from django.http import HttpResponse
+from django.utils import timezone
+from django.utils.timezone import now
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
 def home(request):
     return render(request, 'accounts/home.html')
 
@@ -90,3 +96,22 @@ def loan_status(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'accounts/status.html', {'loans': page_obj})
+
+@login_required
+def generate_payslip(request):
+    salary = Salary.objects.get(user=request.user)
+    template = get_template('accounts/payslip.html')
+    context = {
+        'salary': salary,
+        'user': request.user,
+        'now': timezone.now()
+    }
+    html = template.render(context)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="payslip.pdf"'
+
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('Error generating PDF', status=500)
+    return response

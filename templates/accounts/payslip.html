@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Payslip</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; padding: 20px; }
+        .payslip-box { border: 1px solid #000; padding: 20px; width: 95%; margin: auto; }
+        h2, h4 { text-align: center; margin-bottom: 20px; }
+        table { width: 100%; margin-top: 10px; }
+        td { padding: 5px; }
+        .footer { margin-top: 30px; text-align: center; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="payslip-box">
+        <h2>Payslip {{ salary.payment_for }}</h2> 
+
+        <table>
+            <tr><td><strong>Name:</strong></td><td>{{ user.full_name }}</td></tr>
+            <tr><td><strong>Staff ID:</strong></td><td>{{ user.role }}</td></tr>
+            <tr><td><strong>Generated On:</strong></td><td>{{ now }}</td></tr>
+        </table>
+
+        <h4>Earnings</h4>
+        <table>
+            <tr><td>Gross Salary:</td><td>₦{{ salary.amount|floatformat:2 }}</td></tr>
+        </table>
+
+        <h4>Deductions</h4>
+        <table>
+            <tr><td>Loan Deduction:</td><td>-₦{{ salary.loan|floatformat:2 }}</td></tr>
+        </table>
+
+        <h4>Net Pay</h4>
+        <table>
+            <tr><td>Net Pay:</td><td>-₦{{ salary.balance|floatformat:2 }}</td></tr>
+        </table>
+
+
+        <div class="footer">
+            <p>This is a computer-generated payslip. No signature required.</p>
+        </div>
+    </div>
+</body>
+</html>
