@@ -2,19 +2,25 @@ from django.contrib import admin
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
+from django.utils.timezone import now
 # Register your models here.
 from .models import Salary
-
 @admin.register(Salary)
 class SalaryAdmin(admin.ModelAdmin):
-    list_display = ('user', 'amount', 'loan', 'balance', 'payment_for')
-    readonly_fields = ('balance', 'payment_for')
+    list_display = ('user', 'amount', 'loan', 'balance', 'get_payment_for')
+    readonly_fields = ('balance',)
+    list_filter = ('user', 'amount', 'loan')
+
+    def get_payment_for(self, obj):
+        return obj.payment_for
+    get_payment_for.short_description = 'Payment For'
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ['email', 'full_name', 'role', 'is_staff']
-    ordering = ['email']
+    list_display = ['full_name','email', 'role', 'is_staff']
+    ordering = ['full_name']
+    list_filter = ('full_name','email',)
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
